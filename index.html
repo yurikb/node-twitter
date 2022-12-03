@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Simple Node API Test</title>
+        <style>
+            .loading {
+                opacity: 0.3;
+                pointer-events: none;
+            }
+        </style>
+    </head>
+    <body>
+        <button onclick="yell('/')">Get Home</button>
+        <button onclick="yell('/status')">Get Status</button>
+        <button onclick="yell('/404')">Get 404</button>
+
+        <script>
+            const API_ADRESS = 'http://localhost:3000';
+
+            async function get(endpoint) {
+                return fetch(API_ADRESS + endpoint).then(response =>
+                    response.json()
+                );
+            }
+
+            function yell(endpoint) {
+                loading(true);
+
+                get(endpoint)
+                    .then(data => {
+                        alert(
+                            `Message: ${data.message}.\n\nCheck the console for data`
+                        );
+                        console.log(data);
+                    })
+                    .catch(console.error)
+                    .finally(() => loading(false));
+            }
+
+            function loading(is = true) {
+                document.body.classList[is ? 'add' : 'remove']('loading');
+            }
+        </script>
+    </body>
+</html>
